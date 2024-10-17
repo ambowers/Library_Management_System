@@ -43,6 +43,12 @@ class Section {
             console.log (`${book.title} - ${status}`); //lists all bookks in the section, showing their title and availibility
         });
     }
+// Task 5 handle books borrowing and returning
+    calculateTotalBooksAvailable(){
+        const availableBooks = this.books.filter(book => book.isAvailable);
+        return availableBooks.length
+    }
+
 }
 
 
@@ -98,3 +104,5 @@ class VIPPatron extends Patron {
         }
     }
 }
+
+
