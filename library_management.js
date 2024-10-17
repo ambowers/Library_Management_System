@@ -44,3 +44,37 @@ class Section {
         });
     }
 }
+
+
+// Task 3 Create a patron class
+
+class Patron {
+    constructor(name){
+        this.name = name;
+        this.borrowedBooks =[]; // array to store borrowed books
+    }
+
+    borrowBook(book){
+        if (book.isAvailable){
+            book.isAvailable = false;
+            this.borrowedBooks.push(book);
+            console.log(`${this.name} borrowed ${book.title}`);
+        } //allows the patron to borrow a book if its available
+        else{
+            console.log(`${book.title} is not available`);
+        }
+    }
+
+    returnBook(){
+        const bookIndex = this.borrowedBooks.indexOf(book); // indexOf searches through array and returns index where requested value of found - txtbook pg 68
+        if (bookIndex !== -1){ // use -1 bc 0 is a value of array (1)
+            this.borrowedBooks = this.borrowedBooks
+            .slice(0,bookIndex)
+            .concat(this.borrowedBooks.slice(bookIndex+1));
+            // usinf concat and slice "takes an array and an index and returns a new array that is a copy of the original w the element at the given index removed" txtbook pg 69
+        
+        book.isAvailable = true;
+        console.log(`${this.name} returned ${book.title}`);
+        }
+    }
+}
