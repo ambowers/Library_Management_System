@@ -61,7 +61,7 @@ class Patron {
             console.log(`${this.name} borrowed ${book.title}`);
         } //allows the patron to borrow a book if its available
         else{
-            console.log(`${book.title} is not available`);
+            console.log(`${book.title} is currently unavailable`);
         }
     }
 
@@ -75,6 +75,26 @@ class Patron {
         
         book.isAvailable = true;
         console.log(`${this.name} returned ${book.title}`);
+        }
+    }
+}
+
+// Task 4 Create a VIPPatron class that inherits from Patron
+
+class VIPPatron extends Patron {
+    constructor(name){
+        super(name);
+        this.priority = true; // boolean so vippatrons have borrowing priority over regular patrons
+    }
+
+    borrowBook(book){
+        // override borrowBook method to prioritize in case of competition w regular patrons
+        if (book.isAvailable){
+            book.isAvailable = false
+            this.borrowedBooks.push(book);
+            console.log(`VIPPatron ${this.name} borrowed ${book.title}`)
+        } else{
+            console.log(`${book.title} is currently unavailable`)
         }
     }
 }
