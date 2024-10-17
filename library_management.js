@@ -20,3 +20,27 @@ class Book {
         this._isAvailable = status;
     }
 }
+
+// Task 2 Create a section class
+
+class Section {
+    constructor(name){
+        this.name = name;
+        this.books = []; // array to store books in the section
+    }
+
+    addbook(book){
+        this.books.push(book); // adds a book object to the books aray
+    }
+
+    getAvailableBooks(){
+        return this.books.filter(book => book.isAvailable).length; // returns num of available books in section
+    }
+
+    listbooks(){
+        this.books.forEach(book => {
+            const status = book.isAvailable ? "Available" : "Borrowed";
+            console.log (`${book.title} - ${status}`); //lists all bookks in the section, showing their title and availibility
+        });
+    }
+}
