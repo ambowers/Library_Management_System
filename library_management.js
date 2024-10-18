@@ -29,7 +29,7 @@ class Section {
         this.books = []; // array to store books in the section
     }
 
-    addbook(book){
+    addBook(book){
         this.books.push(book); // adds a book object to the books aray
     }
 
@@ -37,7 +37,7 @@ class Section {
         return this.books.filter(book => book.isAvailable).length; // returns num of available books in section
     }
 
-    listbooks(){
+    listBooks(){
         this.books.forEach(book => {
             const status = book.isAvailable ? "Available" : "Borrowed";
             console.log (`${book.title} - ${status}`); //lists all bookks in the section, showing their title and availibility
@@ -60,28 +60,25 @@ class Patron {
         this.borrowedBooks =[]; // array to store borrowed books
     }
 
-    borrowBook(book){
+    borrowBook(book, isVIP = false){
         if (book.isAvailable){
             book.isAvailable = false;
             this.borrowedBooks.push(book);
             console.log(`${this.name} borrowed ${book.title}`);
         } //allows the patron to borrow a book if its available
-        else{
+        else if (!isVIP){
             console.log(`${book.title} is currently unavailable`);
         }
-    }
+      }
 
-    returnBook(){
+    returnBook(book){
         const bookIndex = this.borrowedBooks.indexOf(book); // indexOf searches through array and returns index where requested value of found - txtbook pg 68
         if (bookIndex !== -1){ // use -1 bc 0 is a value of array (1)
-            this.borrowedBooks = this.borrowedBooks
-            .slice(0,bookIndex)
-            .concat(this.borrowedBooks.slice(bookIndex+1));
-            // usinf concat and slice "takes an array and an index and returns a new array that is a copy of the original w the element at the given index removed" txtbook pg 69
-        
-        book.isAvailable = true;
-        console.log(`${this.name} returned ${book.title}`);
-        }
+        this.borrowedBooks.splice(bookIndex, 1);
+        console.log(`${this.name} returned ${book.title}`)
+        }else{
+            console.log(`${this.name} does not have ${book.title}`)
+        }  
     }
 }
 
@@ -95,14 +92,47 @@ class VIPPatron extends Patron {
 
     borrowBook(book){
         // override borrowBook method to prioritize in case of competition w regular patrons
-        if (book.isAvailable){
-            book.isAvailable = false
-            this.borrowedBooks.push(book);
-            console.log(`VIPPatron ${this.name} borrowed ${book.title}`)
-        } else{
-            console.log(`${book.title} is currently unavailable`)
-        }
+       super.borrowBook(book, true);
+       if (book.isAvailable === false){
+        console.log(`VIP priority: ${this.name} borrowed ${book.title}`)
+       }
     }
 }
 
+// ^^ task 5 done in task 2 to keep in the section class
 
+// Task 6 Create and manage sections and patrons
+
+//Create sections
+const classic = new Section("Classics");
+const autobio = new Section("Autobiographies")
+
+//Create books
+const book1 = new Book("The Catcher in the Rye", "J.D. Salinger", "123321123");
+const book2 = new Book("The Old Man and the Sea", "Ernest Hemingway", "567887654");
+const book3 = new Book("The Diary of a Young Girl", "Anne Frank", "987789987");
+
+//Add books to sections
+classic.addBook(book1);
+classic.addBook(book2);
+autobio.addBook(book3);
+
+//Create patrons
+const regularPatron = new Patron("Dr.Reed");
+const vipPatron = new VIPPatron("Lina Bee", true);
+
+// Regular patron tries to borrow book
+regularPatron.borrowBook(book2);
+
+//VIP patron tries to borrow a book(has priority)
+vipPatron.borrowBook(book2);
+
+//return the book
+regularPatron.returnBook(book2);
+
+//List books and availibility
+classic.listBooks();
+
+//Calculate total books available in each section
+console.log(`Total available books in Classics: ${classic.getAvailableBooks()}`);
+console.log(`Total available books in Autobiographies: ${autobio.getAvailableBooks()}`);
